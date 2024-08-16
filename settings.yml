@@ -1,0 +1,62 @@
+banners:
+  refresh: true
+  default: []
+  type: objects
+  schema:
+    name: Banner message
+    identifier: title
+    properties:
+      enabled_groups:
+        type: groups
+        required: true
+        validations:
+          min: 1
+      title:
+        type: string
+      message:
+        type: string
+        required: true
+        validations:
+          min_length: 15
+          max_length: 500
+      background_color:
+        type: string
+        validations:
+          min_length: 6
+          max_length: 6
+      plugin_outlet:
+        type: enum
+        required: true
+        choices:
+          - "above-site-header"
+          - "below-site-header"
+          - "top-notices"
+      carousel:
+        type: boolean
+      dismissable:
+        type: boolean
+      date_after:
+        type: string
+      date_before:
+        type: string
+      display_order:
+        type: integer
+        validations:
+          min: 0
+          max: 50
+
+splide_options__above_site_header:
+  type: string
+  default: "{ \"arrows\": false, \"autoHeight\": true, \"autoplay\": true, \"direction\": \"ttb\", \"focus\": \"center\", \"height\": \"15vh\", \"gap\": 0, \"type\": \"loop\" }"
+  description: "<a href=\"https://splidejs.com/guides/options/\" target=\"_blank\">Splide options</a> for banners above the site header"
+  refresh: true
+splide_options__below_site_header:
+  type: string
+  default: "{ \"arrows\": false, \"autoHeight\": true, \"autoplay\": true, \"direction\": \"ttb\", \"focus\": \"center\", \"height\": \"15vh\", \"gap\": 0, \"type\": \"loop\" }"
+  description: "<a href=\"https://splidejs.com/guides/options/\" target=\"_blank\">Splide options</a> for banners below the site header"
+  refresh: true
+splide_options__top_notices:
+  type: string
+  default: "{ \"arrows\": false, \"autoHeight\": true, \"autoplay\": true, \"direction\": \"ttb\", \"focus\": \"center\", \"height\": \"15vh\", \"gap\": 0, \"type\": \"loop\" }"
+  description: "<a href=\"https://splidejs.com/guides/options/\" target=\"_blank\">Splide options</a> for banners in top notices"
+  refresh: true

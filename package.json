@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "author": "Osman Gormus <osman@gorm.us>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gormus/discourse-notification-banners.git"
+  },
+  "scripts": {
+    "prettier:check": "prettier --check \"{common,javascripts,desktop,mobile,test,scss}/**/*.{js,gjs,es6,scss}\"",
+    "prettier:fix": "prettier --check --write \"{common,javascripts,desktop,mobile,test,scss}/**/*.{js,gjs,es6,scss}\""
+  },
+  "devDependencies": {
+    "@discourse/lint-configs": "1.3.9",
+    "ember-template-lint": "6.0.0",
+    "eslint": "8.57.0",
+    "prettier": "2.8.8"
+  }
+}

@@ -1,0 +1,38 @@
+en:
+  theme_metadata:
+    description: Notification Banners
+    settings:
+      banners:
+        description: Add a notification banner to the page
+        schema:
+          properties:
+            enabled_groups:
+              label: Audience
+              description: "Who should see this banner? Select all the user-groups as needed. At least, select \"everyone\" group."
+            title:
+              label: Title
+              description: "Notification banner title, displayed in a H2 heading."
+            message:
+              label: Message
+              description: "Notification banner message content"
+            background_color:
+              label: Background Color
+              description: "Set the background color of the banner. Only enter the hex code without the # symbol. i.e. 9EB83B"
+            plugin_outlet:
+              label: Plugin Outlet
+              description: ""
+            carousel:
+              label: Display in a Carousel
+              description: "Enables a carousel for all the banners in the same plugin outlet. When left unchecked, the banner will be displayed as a stack."
+            dismissable:
+              label: Dismissable
+              description: "Allow users to dismiss the banner by closing it.\nNote: When \"caraousel\" is enabled, this setting will be ignored."
+            date_after:
+              label: Starting date
+              description: "Display banner from this date on (optional) 2024-08-15 18:00:00Z"
+            date_before:
+              label: Last date
+              description: "Display banner until this date (optional) 2024-12-01 10:00:00Z"
+            display_order:
+              label: Display Order
+              description: "Set a number between 0 and 50, to set display order of the banners."
