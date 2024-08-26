@@ -128,7 +128,7 @@ export default apiInitializer("1.14.0", (api) => {
                   class="notification-banner
                     {{banner_is_carousel}}
                     {{banner_plugin_outlet}}"
-                  style="{{this.bannerColors}}"
+                  style={{this.bannerColors}}
                 >
                   <div class="notification-banner__wrapper wrap">
                     {{#if this.bannerDismissable}}
@@ -179,6 +179,7 @@ export default apiInitializer("1.14.0", (api) => {
 
           const outlet_name = "splide_options__" + outlet.replaceAll("-", "_");
           const outlet_options = JSON.parse(settings[outlet_name]);
+          // eslint-disable-next-line no-undef
           new Splide(`.splide.${outlet}`, outlet_options).mount();
         }
       });
