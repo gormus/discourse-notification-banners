@@ -2,6 +2,15 @@
 
 Helps admins create notification banners in various plugin outlets.
 
+## Installation
+
+1. Follow the official instructions to add this theme-component to your theme:  
+<https://meta.discourse.org/t/beginners-guide-to-using-discourse-themes/91966#add-theme-components-to-a-theme-9>
+
+2. Change [`theme authorized extensions`](/admin/site_settings/category/files?filter=theme%20authorized%20extensions) setting to include `css` and `js` file extentions.
+
+## Features
+
 Each notification banner may have the following features:
 
 * **Title**, optional, displayed as a H2 heading above the message
