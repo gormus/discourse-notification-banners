@@ -3,7 +3,7 @@ en:
     description: Notification Banners
     settings:
       banners:
-        description: Add a notification banner to the page
+        description: Add notification banners to your site
         schema:
           properties:
             enabled_groups:
