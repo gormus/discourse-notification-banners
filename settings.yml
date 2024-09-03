@@ -22,7 +22,6 @@ banners:
       background_color:
         type: string
         validations:
-          min_length: 6
           max_length: 6
       plugin_outlet:
         type: enum
