@@ -23,8 +23,6 @@ Each notification banner may have the following features:
 * **Starting and Last dates**, when defined, banner's visibility obeys to those dates. So you can set a banner in advance, but it will become visible to selected audience only on set date and time; or similarly you can automatically remove the banner by the last date it should show.
 * **Display order**, define which banner should be displayed top, which should be at bottom.
 
-Note, the `Dismissable` feature is not fully functional yet. Avoid enabling it on production as it will expose non-fucntional close button for the users.
-
 ## The Carousel
 
 The slideshow, or the carousel functionality is provided by [Splide](https://splidejs.com/) library; it is licensed under [MIT](https://github.com/Splidejs/splide/blob/d7e1f08e6b4f4b02a7c6ccbfbeb2d569d85715e6/LICENSE).

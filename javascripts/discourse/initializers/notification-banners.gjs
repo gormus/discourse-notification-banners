@@ -1,4 +1,5 @@
 import Component from "@glimmer/component";
+import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
 import $ from "jquery";
@@ -18,7 +19,7 @@ export default apiInitializer("1.14.0", (api) => {
 
   const banner_list = settings.banners;
 
-  // 1: Sort by display_order
+  // 1: Sort by display_order.
   banner_list.sort((a, b) => a.display_order - b.display_order);
 
   // 2: Display stacked banners first, then carousel banners to group in place.
@@ -29,7 +30,7 @@ export default apiInitializer("1.14.0", (api) => {
     return carouselA - carouselB;
   });
 
-  // 3: Sort by plugin_outlet
+  // 3: Sort by plugin_outlet.
   banner_list.sort((a, b) => {
     const pluginOutletA = a.plugin_outlet.toUpperCase();
     const pluginOutletB = b.plugin_outlet.toUpperCase();
@@ -48,7 +49,7 @@ export default apiInitializer("1.14.0", (api) => {
     const banner_message = BANNER.message.trim();
     const banner_plugin_outlet = BANNER.plugin_outlet.trim();
     const banner_id = `notification-banner--${n}--${banner_plugin_outlet}`;
-    const banner_is_carousel = BANNER.carousel === true ? "carousel" : "";
+    const banner_css_carousel = BANNER.carousel === true ? "carousel" : "";
 
     api.renderInOutlet(
       banner_plugin_outlet,
@@ -56,6 +57,10 @@ export default apiInitializer("1.14.0", (api) => {
         @service store;
         @service router;
         @service siteSettings;
+        @tracked
+        dismissed = this.bannerDismissable
+          ? localStorage.getItem(banner_id)
+          : false;
 
         get showOnRoute() {
           const currentRoute = this.router.currentRoute;
@@ -114,45 +119,54 @@ export default apiInitializer("1.14.0", (api) => {
           return BANNER.dismissable === true;
         }
 
+        get shouldShow() {
+          return (
+            this.showOnRoute &&
+            this.showForCurrentUser &&
+            this.showBetweenDates &&
+            !this.dismissed
+          );
+        }
+
         @action
-        handleCloseButton() {
-          // @todo: Implement dismissable banners.
+        dismiss() {
+          if (!this.bannerDismissable) {
+            return;
+          }
+          this.dismissed = true;
+          return localStorage.setItem(banner_id, true);
         }
 
         <template>
-          {{#if this.showOnRoute}}
-            {{#if this.showForCurrentUser}}
-              {{#if this.showBetweenDates}}
-                <div
-                  id={{banner_id}}
-                  class="notification-banner
-                    {{banner_is_carousel}}
-                    {{banner_plugin_outlet}}"
-                  style={{this.bannerColors}}
-                >
-                  <div class="notification-banner__wrapper wrap">
-                    {{#if this.bannerDismissable}}
-                      <div class="notification-banner__close">
-                        <DButton
-                          @icon="times"
-                          @action={{this.handleCloseButton banner_id}}
-                          @title="banner.close"
-                          class="btn-transparent close"
-                        />
-                      </div>
-                    {{/if}}
-                    <div class="notification-banner__content">
-                      {{#if banner_title}}
-                        <h2
-                          class="notification-banner__header"
-                        >{{banner_title}}</h2>
-                      {{/if}}
-                      <CookText @rawText={{banner_message}} />
-                    </div>
+          {{#if this.shouldShow}}
+            <div
+              id={{banner_id}}
+              class="notification-banner
+                {{banner_css_carousel}}
+                {{banner_plugin_outlet}}"
+              style={{this.bannerColors}}
+            >
+              <div class="notification-banner__wrapper wrap">
+                {{#if this.bannerDismissable}}
+                  <div class="notification-banner__close">
+                    <DButton
+                      @icon="times"
+                      @action={{this.dismiss}}
+                      @title="banner.close"
+                      class="btn-transparent close"
+                    />
                   </div>
+                {{/if}}
+                <div class="notification-banner__content">
+                  {{#if banner_title}}
+                    <h2
+                      class="notification-banner__header"
+                    >{{banner_title}}</h2>
+                  {{/if}}
+                  <CookText @rawText={{banner_message}} />
                 </div>
-              {{/if}}
-            {{/if}}
+              </div>
+            </div>
           {{/if}}
         </template>
       }
