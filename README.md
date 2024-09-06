@@ -1,6 +1,17 @@
 # Discourse Notification Banners
 
-Helps admins create notification banners in various plugin outlets.
+The Notification Banners theme-component provides a customizable and flexible way to share messages on your site. Here are some key features:
+
+* **Fully Customizable**: Tailor each banner to suit your needs, including content, style, and behavior.
+* **Flexible Display Options**: Show banners stacked or as a rotating carousel for easy browsing.
+* **Targeted Messaging**: Display banners only to specific user groups, ensuring personalized communication.
+* **Theme Support**: Banners automatically adjust to light or dark themes, or you can set custom colors.
+* **Markdown Support**: Use Markdown to format your banner messages easily.
+* **Carousel Powered by Splide**: The carousel feature is powered by the [Splide](https://splidejs.com/) JavaScript library, with individual settings for each banner.
+* **Scheduling**: Set specific start and end dates for when banners should appear.
+* **Easy Display Order**: Control the order in which banners are shown with simple settings.
+
+This component makes it easy to engage your audience with visually appealing, personalized, and well-organized notifications.
 
 ## Installation
 
