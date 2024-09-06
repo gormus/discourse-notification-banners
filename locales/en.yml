@@ -1,6 +1,6 @@
 en:
   theme_metadata:
-    description: Notification Banners
+    description: The Notification Banners theme-component provides a customizable and flexible way to share messages on your site.
     settings:
       banners:
         description: Add notification banners to your site
