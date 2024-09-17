@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
 import $ from "jquery";
 import CookText from "discourse/components/cook-text";
 import DButton from "discourse/components/d-button";
@@ -166,7 +167,7 @@ export default apiInitializer("1.14.0", (api) => {
                 class="notification-banner
                   {{banner_css_carousel}}
                   {{banner_plugin_outlet}}"
-                style={{this.bannerColors}}
+                style={{htmlSafe this.bannerColors}}
               >
                 <div class="notification-banner__wrapper wrap">
                   {{#if this.bannerDismissable}}
