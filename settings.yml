@@ -11,6 +11,8 @@ banners:
         required: true
         validations:
           min: 1
+      selected_categories:
+        type: categories
       title:
         type: string
       message:

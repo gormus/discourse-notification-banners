@@ -2,6 +2,7 @@ import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import { inject as service } from "@ember/service";
+import { htmlSafe } from "@ember/template";
 import $ from "jquery";
 import CookText from "discourse/components/cook-text";
 import DButton from "discourse/components/d-button";
@@ -53,6 +54,7 @@ export default apiInitializer("1.14.0", (api) => {
 
     banner_list.forEach((BANNER, n) => {
       const banner_audience = BANNER.enabled_groups;
+      const banner_categories = BANNER.selected_categories;
       const banner_title = BANNER.title?.trim();
       const banner_message = BANNER.message.trim();
       const banner_plugin_outlet = BANNER.plugin_outlet.trim();
@@ -74,6 +76,18 @@ export default apiInitializer("1.14.0", (api) => {
             const currentRoute = this.router.currentRoute;
             // Show everywhere but admin pages.
             return !currentRoute.name.includes("admin");
+          }
+
+          get showOnCategory() {
+            if (banner_categories.length === 0) {
+              return true;
+            }
+            const currentRoute = this.router.currentRoute;
+            const category_id = currentRoute.attributes?.category?.id;
+            return (
+              currentRoute.name === "discovery.category" &&
+              banner_categories.includes(category_id)
+            );
           }
 
           get showForCurrentUser() {
@@ -130,6 +144,7 @@ export default apiInitializer("1.14.0", (api) => {
           get shouldShow() {
             return (
               this.showOnRoute &&
+              this.showOnCategory &&
               this.showForCurrentUser &&
               this.showBetweenDates &&
               !this.dismissed
@@ -152,7 +167,7 @@ export default apiInitializer("1.14.0", (api) => {
                 class="notification-banner
                   {{banner_css_carousel}}
                   {{banner_plugin_outlet}}"
-                style={{this.bannerColors}}
+                style={{htmlSafe this.bannerColors}}
               >
                 <div class="notification-banner__wrapper wrap">
                   {{#if this.bannerDismissable}}

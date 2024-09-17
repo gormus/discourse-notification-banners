@@ -9,6 +9,9 @@ en:
             enabled_groups:
               label: Audience
               description: "Who should see this banner? Select all the user-groups as needed. At least, select \"everyone\" group."
+            selected_categories:
+              label: Categories
+              description: "Select categories to display the banner on. Leave empty to display on all categories."
             title:
               label: Title
               description: "Notification banner title, displayed in a H2 heading."

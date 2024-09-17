@@ -27,6 +27,7 @@ Each notification banner may have the following features:
 * **Title**, optional, displayed as a H2 heading above the message
 * **Message**, 500 character long simple notification message. Markdown is supported.
 * **Audience**, select the user groups as audience for the notification.
+* **Categories**; select categories to display the banner on. Leave empty to display on all categories.
 * **Background color**, can be set to differantiate the banner from others.
 * **Plugin outlet**, set notifications above or below the site header, or use the top-notices outlet to display along with native topic banners.
 * **Display in a carousel**, when selected, all the banners in each outlet are displayed in a carousel. Requires minimum 2 banners to be selected for any outlet.
