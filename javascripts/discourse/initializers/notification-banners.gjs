@@ -79,7 +79,7 @@ export default apiInitializer("1.14.0", (api) => {
           }
 
           get showOnCategory() {
-            if (banner_categories.length === 0) {
+            if (!banner_categories || banner_categories.length === 0) {
               return true;
             }
             const currentRoute = this.router.currentRoute;
