@@ -54,7 +54,7 @@ export default apiInitializer("1.14.0", (api) => {
 
     banner_list.forEach((BANNER, n) => {
       const banner_audience = BANNER.enabled_groups;
-      const banner_categories = BANNER.selected_categories;
+      const banner_categories = BANNER.selected_categories || [];
       const banner_title = BANNER.title?.trim();
       const banner_message = BANNER.message.trim();
       const banner_plugin_outlet = BANNER.plugin_outlet.trim();
