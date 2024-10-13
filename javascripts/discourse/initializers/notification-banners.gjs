@@ -53,9 +53,8 @@ export default apiInitializer("1.14.0", (api) => {
     });
 
     banner_list.forEach((BANNER, n) => {
-      console.log(n, BANNER);
       const banner_audience = BANNER.enabled_groups;
-      const banner_categories = BANNER.selected_categories;
+      const banner_categories = BANNER.selected_categories || [];
       const banner_title = BANNER.title?.trim();
       const banner_message = BANNER.message.trim();
       const banner_plugin_outlet = BANNER.plugin_outlet.trim();
@@ -80,7 +79,7 @@ export default apiInitializer("1.14.0", (api) => {
           }
 
           get showOnCategory() {
-            if (!banner_categories || banner_categories.length === 0) {
+            if (banner_categories.length === 0) {
               return true;
             }
             const currentRoute = this.router.currentRoute;
