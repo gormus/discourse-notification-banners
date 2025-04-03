@@ -1,0 +1,4 @@
+pnpm run dev:eslint
+pnpm run dev:stylelint
+pnpm run dev:prettier
+pnpm run "dev:ember-template-lint"

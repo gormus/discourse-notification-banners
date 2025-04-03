@@ -9,7 +9,7 @@ import DButton from "discourse/components/d-button";
 import { apiInitializer } from "discourse/lib/api";
 import loadScript from "discourse/lib/load-script";
 
-export default apiInitializer("1.14.0", (api) => {
+export default apiInitializer((api) => {
   try {
     const splide_css = document.createElement("link");
     splide_css.setAttribute("rel", "stylesheet");
