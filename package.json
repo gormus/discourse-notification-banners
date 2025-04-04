@@ -14,9 +14,14 @@
     "dev:prettier:fix": "prettier --list-different --write \"{common,desktop,javascripts,mobile,scss,spec,test}/**/*.{js,gjs,scss,hbs}\"",
     "dev:ember-template-lint": "ember-template-lint --no-error-on-unmatched-pattern javascripts",
     "dev:rubocop": "bundle exec rubocop .",
+    "commit": "commit",
+    "commitlint": "commitlint --edit",
     "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@commitlint/prompt-cli": "^19.8.0",
     "@discourse/lint-configs": "2.11.1",
     "ember-template-lint": "7.0.1",
     "eslint": "9.22.0",
