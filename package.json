@@ -2,7 +2,7 @@
   "private": true,
   "author": "Osman Gormus <osman@gorm.us>",
   "license": "MIT",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/gormus/discourse-notification-banners.git"
