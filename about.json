@@ -1,6 +1,6 @@
 {
   "name": "Discourse Notification Banners",
-  "theme_version": "1.2.1",
+  "theme_version": "1.2.2",
   "authors": "Osman Gormus <osman@gorm.us>",
   "component": true,
   "assets": {

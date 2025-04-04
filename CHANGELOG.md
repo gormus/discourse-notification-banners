@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.2 (2025-04-04)
+
+## What's Changed
+* chore: require commit messages to follow the Conventional Commits by @gormus in https://github.com/gormus/discourse-notification-banners/pull/15
+
+
+**Full Changelog**: https://github.com/gormus/discourse-notification-banners/compare/v1.2.1...v1.2.2
+
 ## 1.2.1 (2025-04-04)
 
 ## What's Changed
