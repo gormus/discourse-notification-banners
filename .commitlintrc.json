@@ -1,0 +1,4 @@
+{
+  "extends": ["@commitlint/config-conventional"],
+  "helpUrl": "CONTRIBUTING.md#Examples"
+}
