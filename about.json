@@ -1,13 +1,16 @@
 {
   "name": "Discourse Notification Banners",
-  "theme_version": "1.2.2",
-  "authors": "Osman Gormus <osman@gorm.us>",
   "component": true,
+  "authors": "Osman Gormus <osman@gorm.us>",
+  "about_url": "https://meta.discourse.org/t/notification-banners/325279",
+  "license_url": "https://github.com/gormus/discourse-notification-banners/blob/main/LICENSE",
+  "learn_more": "https://meta.discourse.org/t/beginners-guide-to-using-discourse-themes/91966",
+  "theme_version": "1.2.2",
+  "minimum_discourse_version": null,
+  "maximum_discourse_version": null,
   "assets": {
     "splide_css": "assets/splide-4.1.3/css/splide.min.css",
     "splide_js": "assets/splide-4.1.3/js/splide.min.js"
   },
-  "about_url": "https://meta.discourse.org/t/notification-banners/325279",
-  "license_url": "https://github.com/gormus/discourse-notification-banners/blob/main/LICENSE",
-  "learn_more": "https://meta.discourse.org/t/beginners-guide-to-using-discourse-themes/91966"
+  "modifiers": {}
 }
