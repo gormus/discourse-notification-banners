@@ -28,7 +28,7 @@
 
   // eslint fix on save
   "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
+    "source.fixAll.eslint": "always"
   },
 
   "task.autoDetect": "off",
