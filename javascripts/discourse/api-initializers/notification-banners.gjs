@@ -174,7 +174,7 @@ export default apiInitializer((api) => {
                   {{#if this.bannerDismissable}}
                     <div class="notification-banner__close">
                       <DButton
-                        @icon="times"
+                        @icon="xmark"
                         @action={{this.dismiss}}
                         @title="banner.close"
                         class="btn-transparent close"
