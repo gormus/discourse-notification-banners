@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.2.3 (2025-06-09)
+
+## What's Changed
+* chore: maintenance updates by @gormus in https://github.com/gormus/discourse-notification-banners/pull/18
+* chore(deps-dev): bump rack from 3.1.12 to 3.1.16 by @dependabot in https://github.com/gormus/discourse-notification-banners/pull/19
+
+## New Contributors
+* @dependabot made their first contribution in https://github.com/gormus/discourse-notification-banners/pull/19
+
+**Full Changelog**: https://github.com/gormus/discourse-notification-banners/compare/v1.2.2...v1.2.3
+
 ## 1.2.2 (2025-04-04)
 
 ## What's Changed
