@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.4 (2025-08-18)
+
+**Full Changelog**: https://github.com/gormus/discourse-notification-banners/compare/v1.2.3...v1.2.4
+
 ## 1.2.3 (2025-06-09)
 
 ## What's Changed
