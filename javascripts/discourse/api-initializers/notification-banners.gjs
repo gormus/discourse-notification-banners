@@ -197,35 +197,28 @@ export default apiInitializer((api) => {
       );
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
-      loadScript(settings.theme_uploads.splide_js).then(() => {
-        const outlets = [
-          "above-site-header",
-          "below-site-header",
-          "top-notices",
-        ];
-        outlets.forEach((outlet) => {
-          const carouselBanners = document.querySelectorAll(
-            `.notification-banner.carousel.${outlet}`
-          );
-          if (carouselBanners.length > 1) {
-            $(`.notification-banner.carousel.${outlet}`).each(function () {
-              $(this).find(".notification-banner__close").remove();
-              $(this).removeClass("carousel");
-              $(this).wrap(`<li class="splide__slide ${outlet}"></li>`);
-            });
+    loadScript(settings.theme_uploads.splide_js).then(() => {
+      const outlets = ["above-site-header", "below-site-header", "top-notices"];
+      outlets.forEach((outlet) => {
+        const carouselBanners = document.querySelectorAll(
+          `.notification-banner.carousel.${outlet}`
+        );
+        if (carouselBanners.length > 1) {
+          $(`.notification-banner.carousel.${outlet}`).each(function () {
+            $(this).find(".notification-banner__close").remove();
+            $(this).removeClass("carousel");
+            $(this).wrap(`<li class="splide__slide ${outlet}"></li>`);
+          });
 
-            const template = `<div class="splide ${outlet}" role="group" aria-label="Notification banners"><div class="splide__track"><ul class="splide__list"></ul></div></div>`;
-            $(`.splide__slide.${outlet}`).wrapAll(template);
+          const template = `<div class="splide ${outlet}" role="group" aria-label="Notification banners"><div class="splide__track"><ul class="splide__list"></ul></div></div>`;
+          $(`.splide__slide.${outlet}`).wrapAll(template);
 
-            const outlet_name =
-              "splide_options__" + outlet.replaceAll("-", "_");
-            const outlet_options = JSON.parse(settings[outlet_name]);
+          const outlet_name = "splide_options__" + outlet.replaceAll("-", "_");
+          const outlet_options = JSON.parse(settings[outlet_name]);
 
-            // eslint-disable-next-line no-undef
-            new Splide(`.splide.${outlet}`, outlet_options).mount();
-          }
-        });
+          // eslint-disable-next-line no-undef
+          new Splide(`.splide.${outlet}`, outlet_options).mount();
+        }
       });
     });
   } catch (e) {
