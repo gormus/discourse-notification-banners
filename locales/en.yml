@@ -8,7 +8,7 @@ en:
           properties:
             enabled_groups:
               label: Audience
-              description: "Who should see this banner? Select all the user-groups as needed. At least, select \"everyone\" group."
+              description: "Select which user groups can see this banner. You must select at least one group.\n\n <b>To show to all users and visitors:</b> Select the <code>everyone</code> group.\n\n <b>Important note on Trust Levels:</b> Selecting a Trust Level (e.g., <code>trust_level_3</code>) will show the banner <b>only</b> to users at that exact level. It does not include users at higher or lower levels."
             selected_categories:
               label: Categories
               description: "Select categories to display the banner on. Leave empty to display on all categories."
@@ -28,7 +28,7 @@ en:
               label: Display in a Carousel
               description: "Enables a carousel for all the banners in the same plugin outlet. When left unchecked, the banner will be displayed as a stack."
             dismissable:
-              label: Dismissable
+              label: Dismissible
               description: "Allow users to dismiss the banner by closing it.\nNote: When \"caraousel\" is enabled, this setting will be ignored."
             date_after:
               label: Starting date

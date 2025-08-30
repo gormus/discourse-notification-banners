@@ -3,229 +3,282 @@ import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
 import { htmlSafe } from "@ember/template";
-import $ from "jquery";
 import CookText from "discourse/components/cook-text";
 import DButton from "discourse/components/d-button";
 import { apiInitializer } from "discourse/lib/api";
 import loadScript from "discourse/lib/load-script";
 
-export default apiInitializer((api) => {
-  try {
-    const splide_css = document.createElement("link");
-    splide_css.setAttribute("rel", "stylesheet");
-    splide_css.setAttribute("type", "text/css");
-    splide_css.setAttribute("id", "splide-css");
-    splide_css.setAttribute("href", settings.theme_uploads.splide_css);
-    document.head.appendChild(splide_css);
+// Constants
+const TL_GROUPS = [10, 11, 12, 13, 14];
+const BANNER_OUTLETS = [
+  "above-site-header",
+  "below-site-header",
+  "top-notices",
+];
 
-    const current_user = api.getCurrentUser();
-    let current_user_groups = [0];
-    if (current_user) {
-      current_user.groups.filter((group) => {
-        current_user_groups.push(group.id);
+function loadSplideCSS() {
+  if (document.getElementById("splide-css")) {
+    return;
+  }
+
+  const link = document.createElement("link");
+  Object.assign(link, {
+    rel: "stylesheet",
+    type: "text/css",
+    id: "splide-css",
+    href: settings.theme_uploads.splide_css,
+  });
+  document.head.appendChild(link);
+}
+
+function getUserGroups(currentUser) {
+  if (!currentUser) {
+    return [0];
+  }
+
+  const allGroups = currentUser.groups.map((group) => group.id);
+  const tlGroups = allGroups.filter((g) => TL_GROUPS.includes(g));
+  const highestTl = tlGroups.length > 0 ? [Math.max(...tlGroups)] : [];
+  const nonTlGroups = allGroups.filter((group) => !tlGroups.includes(group));
+
+  return [...highestTl, ...nonTlGroups];
+}
+
+function sortBanners(bannerList) {
+  return bannerList.sort((a, b) => {
+    // Primary: plugin_outlet
+    const outletComparison = a.plugin_outlet.localeCompare(b.plugin_outlet);
+    if (outletComparison !== 0) {
+      return outletComparison;
+    }
+
+    // Secondary: carousel (stacked first)
+    const carouselComparison = (a.carousel ? 1 : 0) - (b.carousel ? 1 : 0);
+    if (carouselComparison !== 0) {
+      return carouselComparison;
+    }
+
+    // Tertiary: display_order
+    return a.display_order - b.display_order;
+  });
+}
+
+function calculateContrastColor(backgroundColor) {
+  if (!backgroundColor) {
+    return "var(--primary)";
+  }
+
+  const r = parseInt(backgroundColor.substring(0, 2), 16);
+  const g = parseInt(backgroundColor.substring(2, 4), 16);
+  const b = parseInt(backgroundColor.substring(4, 6), 16);
+
+  const srgb = [r, g, b].map((i) => {
+    const normalized = i / 255;
+    return normalized <= 0.04045
+      ? normalized / 12.92
+      : Math.pow((normalized + 0.055) / 1.055, 2.4);
+  });
+
+  const luminance = 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2];
+  return luminance > 0.179 ? "#000000" : "#FFFFFF";
+}
+
+async function initializeCarousels() {
+  await loadScript(settings.theme_uploads.splide_js);
+
+  BANNER_OUTLETS.forEach((outlet) => {
+    const carouselBanners = document.querySelectorAll(
+      `.notification-banner.carousel.${outlet}`
+    );
+
+    if (carouselBanners.length <= 1) {
+      return;
+    }
+
+    // Process banners for carousel
+    carouselBanners.forEach((banner) => {
+      // Remove close button and carousel class
+      banner.querySelector(".notification-banner__close")?.remove();
+      banner.classList.remove("carousel");
+
+      // Wrap in slide element
+      const slide = document.createElement("li");
+      slide.className = `splide__slide ${outlet}`;
+      banner.parentNode.insertBefore(slide, banner);
+      slide.appendChild(banner);
+    });
+
+    // Create carousel wrapper and wrap slides
+    const slides = document.querySelectorAll(`.splide__slide.${outlet}`);
+    if (slides.length > 0) {
+      // Create wrapper elements
+      const splideWrapper = document.createElement("div");
+      splideWrapper.className = `splide ${outlet}`;
+      splideWrapper.setAttribute("role", "group");
+      splideWrapper.setAttribute("aria-label", "Notification banners");
+
+      const splideTrack = document.createElement("div");
+      splideTrack.className = "splide__track";
+
+      const splideList = document.createElement("ul");
+      splideList.className = "splide__list";
+
+      // Build the structure
+      splideTrack.appendChild(splideList);
+      splideWrapper.appendChild(splideTrack);
+
+      // Insert wrapper before first slide
+      const firstSlide = slides[0];
+      firstSlide.parentNode.insertBefore(splideWrapper, firstSlide);
+
+      // Move all slides into the wrapper
+      slides.forEach((slide) => {
+        splideList.appendChild(slide);
       });
     }
 
-    const banner_list = settings.banners;
+    // Initialize Splide with outlet-specific options
+    const optionsKey = `splide_options__${outlet.replaceAll("-", "_")}`;
+    const options = JSON.parse(settings[optionsKey] || "{}");
 
-    // 1: Sort by display_order.
-    banner_list.sort((a, b) => a.display_order - b.display_order);
+    // eslint-disable-next-line no-undef
+    new Splide(`.splide.${outlet}`, options).mount();
+  });
+}
 
-    // 2: Display stacked banners first, then carousel banners to group in place.
-    banner_list.sort((a, b) => {
-      const carouselA = a.carousel === true ? 1 : 0;
-      const carouselB = b.carousel === true ? 1 : 0;
+export default apiInitializer((api) => {
+  loadSplideCSS();
 
-      return carouselA - carouselB;
-    });
+  const currentUser = api.getCurrentUser();
+  const currentUserGroups = getUserGroups(currentUser);
+  const sortedBanners = sortBanners([...settings.banners]);
 
-    // 3: Sort by plugin_outlet.
-    banner_list.sort((a, b) => {
-      const pluginOutletA = a.plugin_outlet.toUpperCase();
-      const pluginOutletB = b.plugin_outlet.toUpperCase();
-      if (pluginOutletA < pluginOutletB) {
-        return -1;
+  // Create banner components
+  sortedBanners.forEach((banner, index) => {
+    const {
+      enabled_groups: audience = [],
+      selected_categories: categories = [],
+      title,
+      message,
+      plugin_outlet: outlet,
+      carousel = false,
+      dismissable = false,
+      background_color,
+      date_after,
+      date_before,
+    } = banner;
+
+    const bannerId = `notification-banner--${index}--${outlet}`;
+    const bannerTitle = title?.trim();
+    const bannerMessage = message.trim();
+
+    class NotificationBanner extends Component {
+      @service store;
+      @service router;
+      @service siteSettings;
+
+      @tracked
+      dismissed = dismissable
+        ? localStorage.getItem(bannerId) === "true"
+        : false;
+
+      get showOnRoute() {
+        return !this.router.currentRouteName.startsWith("admin");
       }
-      if (pluginOutletA > pluginOutletB) {
-        return 1;
-      }
-      return 0;
-    });
 
-    banner_list.forEach((BANNER, n) => {
-      const banner_audience = BANNER.enabled_groups;
-      const banner_categories = BANNER.selected_categories || [];
-      const banner_title = BANNER.title?.trim();
-      const banner_message = BANNER.message.trim();
-      const banner_plugin_outlet = BANNER.plugin_outlet.trim();
-      const banner_id = `notification-banner--${n}--${banner_plugin_outlet}`;
-      const banner_css_carousel = BANNER.carousel === true ? "carousel" : "";
-
-      api.renderInOutlet(
-        banner_plugin_outlet,
-        class NotificationBanners extends Component {
-          @service store;
-          @service router;
-          @service siteSettings;
-
-          @tracked
-          dismissed = this.bannerDismissable
-            ? localStorage.getItem(banner_id)
-            : false;
-
-          get showOnRoute() {
-            const currentRoute = this.router.currentRoute;
-            // Show everywhere but admin pages.
-            return !currentRoute.name.includes("admin");
-          }
-
-          get showOnCategory() {
-            if (banner_categories.length === 0) {
-              return true;
-            }
-            const currentRoute = this.router.currentRoute;
-            const category_id = currentRoute.attributes?.category?.id;
-            return (
-              currentRoute.name === "discovery.category" &&
-              banner_categories.includes(category_id)
-            );
-          }
-
-          get showForCurrentUser() {
-            if (banner_audience.includes(0)) {
-              return true;
-            }
-            return banner_audience.some((group) =>
-              current_user_groups.includes(group)
-            );
-          }
-
-          get showBetweenDates() {
-            const currentDate = new Date().valueOf();
-            const dateAfter = isNaN(Date.parse(BANNER.date_after))
-              ? currentDate
-              : Date.parse(BANNER.date_after);
-            const dateBefore = isNaN(Date.parse(BANNER.date_before))
-              ? currentDate
-              : Date.parse(BANNER.date_before);
-            return currentDate >= dateAfter && currentDate <= dateBefore;
-          }
-
-          get bannerColors() {
-            const background_color = BANNER.background_color;
-
-            let foregroundColor = "var(--primary)";
-            let backgroundColor = "var(--tertiary-low)";
-            if (background_color) {
-              const r = parseInt(background_color.substring(0, 2), 16);
-              const g = parseInt(background_color.substring(2, 4), 16);
-              const b = parseInt(background_color.substring(4, 6), 16);
-
-              const srgb = [r / 255, g / 255, b / 255];
-              const x = srgb.map((i) => {
-                if (i <= 0.04045) {
-                  return i / 12.92;
-                } else {
-                  return Math.pow((i + 0.055) / 1.055, 2.4);
-                }
-              });
-
-              const L = 0.2126 * x[0] + 0.7152 * x[1] + 0.0722 * x[2];
-              foregroundColor = L > 0.179 ? "#000000" : "#FFFFFF";
-              backgroundColor = `#${background_color}`;
-            }
-
-            return `background: ${backgroundColor}; color: ${foregroundColor};`;
-          }
-
-          get bannerDismissable() {
-            return BANNER.dismissable === true;
-          }
-
-          get shouldShow() {
-            return (
-              this.showOnRoute &&
-              this.showOnCategory &&
-              this.showForCurrentUser &&
-              this.showBetweenDates &&
-              !this.dismissed
-            );
-          }
-
-          @action
-          dismiss() {
-            if (!this.bannerDismissable) {
-              return;
-            }
-            this.dismissed = true;
-            return localStorage.setItem(banner_id, true);
-          }
-
-          <template>
-            {{#if this.shouldShow}}
-              <div
-                id={{banner_id}}
-                class="notification-banner
-                  {{banner_css_carousel}}
-                  {{banner_plugin_outlet}}"
-                style={{htmlSafe this.bannerColors}}
-              >
-                <div class="notification-banner__wrapper wrap">
-                  {{#if this.bannerDismissable}}
-                    <div class="notification-banner__close">
-                      <DButton
-                        @icon="xmark"
-                        @action={{this.dismiss}}
-                        @title="banner.close"
-                        class="btn-transparent close"
-                      />
-                    </div>
-                  {{/if}}
-                  <div class="notification-banner__content">
-                    {{#if banner_title}}
-                      <h2
-                        class="notification-banner__header"
-                      >{{banner_title}}</h2>
-                    {{/if}}
-                    <CookText @rawText={{banner_message}} />
-                  </div>
-                </div>
-              </div>
-            {{/if}}
-          </template>
+      get showOnCategory() {
+        if (categories.length === 0) {
+          return true;
         }
-      );
-    });
 
-    loadScript(settings.theme_uploads.splide_js).then(() => {
-      const outlets = ["above-site-header", "below-site-header", "top-notices"];
-      outlets.forEach((outlet) => {
-        const carouselBanners = document.querySelectorAll(
-          `.notification-banner.carousel.${outlet}`
+        const { currentRoute } = this.router;
+        const categoryId = currentRoute.attributes?.category?.id;
+
+        return (
+          currentRoute.name === "discovery.category" &&
+          categories.includes(categoryId)
         );
-        if (carouselBanners.length > 1) {
-          $(`.notification-banner.carousel.${outlet}`).each(function () {
-            $(this).find(".notification-banner__close").remove();
-            $(this).removeClass("carousel");
-            $(this).wrap(`<li class="splide__slide ${outlet}"></li>`);
-          });
+      }
 
-          const template = `<div class="splide ${outlet}" role="group" aria-label="Notification banners"><div class="splide__track"><ul class="splide__list"></ul></div></div>`;
-          $(`.splide__slide.${outlet}`).wrapAll(template);
+      get showForCurrentUser() {
+        return (
+          audience.includes(0) ||
+          audience.some((group) => currentUserGroups.includes(group))
+        );
+      }
 
-          const outlet_name = "splide_options__" + outlet.replaceAll("-", "_");
-          const outlet_options = JSON.parse(settings[outlet_name]);
+      get showBetweenDates() {
+        const now = Date.now();
+        const startDate = date_after ? Date.parse(date_after) : now;
+        const endDate = date_before ? Date.parse(date_before) : now;
 
-          // eslint-disable-next-line no-undef
-          new Splide(`.splide.${outlet}`, outlet_options).mount();
+        return now >= startDate && now <= endDate;
+      }
+
+      get bannerStyles() {
+        const backgroundColor = background_color
+          ? `#${background_color}`
+          : "var(--tertiary-low)";
+        const textColor = background_color
+          ? calculateContrastColor(background_color)
+          : "var(--primary)";
+
+        return `background: ${backgroundColor}; color: ${textColor};`;
+      }
+
+      get shouldShow() {
+        return (
+          this.showOnRoute &&
+          this.showOnCategory &&
+          this.showForCurrentUser &&
+          this.showBetweenDates &&
+          !this.dismissed
+        );
+      }
+
+      @action
+      dismiss() {
+        if (!dismissable) {
+          return;
         }
-      });
-    });
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(
-      e,
-      "There is a problem loading the notification-banners initializer."
-    );
-  }
+
+        this.dismissed = true;
+        localStorage.setItem(bannerId, "true");
+      }
+
+      <template>
+        {{#if this.shouldShow}}
+          <div
+            id={{bannerId}}
+            class="notification-banner {{if carousel 'carousel'}} {{outlet}}"
+            style={{htmlSafe this.bannerStyles}}
+          >
+            <div class="notification-banner__wrapper wrap">
+              {{#if dismissable}}
+                <div class="notification-banner__close">
+                  <DButton
+                    @icon="xmark"
+                    @action={{this.dismiss}}
+                    @title="banner.close"
+                    class="btn-transparent close"
+                  />
+                </div>
+              {{/if}}
+              <div class="notification-banner__content">
+                {{#if bannerTitle}}
+                  <h2 class="notification-banner__header">{{bannerTitle}}</h2>
+                {{/if}}
+                <CookText @rawText={{bannerMessage}} />
+              </div>
+            </div>
+          </div>
+        {{/if}}
+      </template>
+    }
+
+    api.renderInOutlet(outlet, NotificationBanner);
+  });
+
+  // Initialize carousels after DOM is ready
+  initializeCarousels();
 });
