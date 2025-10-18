@@ -36,6 +36,3 @@ en:
             date_before:
               label: Last date
               description: "Display banner until this date (optional) 2024-12-01 10:00:00Z"
-            display_order:
-              label: Display Order
-              description: "Set a number between 0 and 50, to set display order of the banners."

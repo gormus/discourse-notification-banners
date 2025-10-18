@@ -1,0 +1,11 @@
+# Git attributes for better merge handling
+*.yml merge=union
+*.yaml merge=union
+*.json merge=union
+*.md merge=union
+*.txt merge=union
+*.lock merge=union
+
+# Preserve custom files during merges
+template-customizations/ merge=ours
+.github/template-workflow/ merge=ours

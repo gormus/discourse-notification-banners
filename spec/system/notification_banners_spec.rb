@@ -27,7 +27,6 @@ RSpec.describe "Notification Banners", system: true do
             "dismissable" => true,
             "date_after" => "",
             "date_before" => "",
-            "display_order" => 1,
           },
         ].to_json,
       )
@@ -57,7 +56,6 @@ RSpec.describe "Notification Banners", system: true do
             "dismissable" => true,
             "date_after" => "",
             "date_before" => "",
-            "display_order" => 1,
           },
         ].to_json,
       )
@@ -88,7 +86,6 @@ RSpec.describe "Notification Banners", system: true do
             "dismissable" => false,
             "date_after" => 1.day.from_now.iso8601,
             "date_before" => 2.days.from_now.iso8601,
-            "display_order" => 1,
           },
         ].to_json,
       )
@@ -116,7 +113,6 @@ RSpec.describe "Notification Banners", system: true do
             "dismissable" => false,
             "date_after" => "",
             "date_before" => "",
-            "display_order" => 1,
           },
         ].to_json,
       )
@@ -150,7 +146,6 @@ RSpec.describe "Notification Banners", system: true do
             "dismissable" => false,
             "date_after" => "",
             "date_before" => "",
-            "display_order" => 1,
           },
         ].to_json,
       )
@@ -163,6 +158,206 @@ RSpec.describe "Notification Banners", system: true do
 
       visit "/"
       expect(page).to have_no_css(".notification-banner", text: "Category Banner")
+    end
+  end
+
+  context "when multiple carousel banners are configured" do
+    before do
+      theme_component.update_setting(
+        :banners,
+        [
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "Carousel One",
+            "message" => "First carousel banner content",
+            "background_color" => "111111",
+            "plugin_outlet" => "above-site-header",
+            "carousel" => true,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "Carousel Two",
+            "message" => "Second carousel banner content",
+            "background_color" => "222222",
+            "plugin_outlet" => "above-site-header",
+            "carousel" => true,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+        ].to_json,
+      )
+      theme_component.save!
+    end
+
+    it "renders a Splide carousel with two slides" do
+      visit "/"
+      expect(page).to have_css(".splide[aria-roledescription='carousel']")
+      expect(page).to have_css(".splide .splide__slide .notification-banner", text: "Carousel One")
+      expect(page).to have_css(".splide .splide__slide .notification-banner", text: "Carousel Two")
+    end
+  end
+
+  context "when a single carousel banner is configured" do
+    before do
+      theme_component.update_setting(
+        :banners,
+        [
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "Single Carousel",
+            "message" => "Only one carousel banner so it should render solo",
+            "background_color" => "333333",
+            "plugin_outlet" => "above-site-header",
+            "carousel" => true,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+        ].to_json,
+      )
+      theme_component.save!
+    end
+
+    it "does not render the carousel container and renders a solo banner instead" do
+      visit "/"
+      expect(page).to have_no_css(".splide[aria-roledescription='carousel']")
+      expect(page).to have_css(".notification-banner", text: "Single Carousel")
+    end
+  end
+
+  context "when rendering banners in different plugin outlets" do
+    before do
+      theme_component.update_setting(
+        :banners,
+        [
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "Above Header",
+            "message" => "Banner above the site header",
+            "background_color" => "444444",
+            "plugin_outlet" => "above-site-header",
+            "carousel" => false,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "Below Header",
+            "message" => "Banner below the site header",
+            "background_color" => "555555",
+            "plugin_outlet" => "below-site-header",
+            "carousel" => false,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "Top Notices",
+            "message" => "Banner in top notices",
+            "background_color" => "666666",
+            "plugin_outlet" => "top-notices",
+            "carousel" => false,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+        ].to_json,
+      )
+      theme_component.save!
+    end
+
+    it "displays banners for each configured outlet" do
+      visit "/"
+      expect(page).to have_css(".notification-banner", text: "Above Header")
+      expect(page).to have_css(".notification-banner", text: "Below Header")
+      expect(page).to have_css(".notification-banner", text: "Top Notices")
+    end
+  end
+
+  context "when visiting admin routes" do
+    before do
+      theme_component.update_setting(
+        :banners,
+        [
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "No Admin",
+            "message" => "Should not be visible in admin routes",
+            "background_color" => "777777",
+            "plugin_outlet" => "above-site-header",
+            "carousel" => false,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+        ].to_json,
+      )
+      theme_component.save!
+    end
+
+    it "does not display banners on /admin" do
+      visit "/admin"
+      expect(page).to have_no_css(".notification-banner", text: "No Admin")
+    end
+  end
+
+  context "when applying background color styles" do
+    before do
+      theme_component.update_setting(
+        :banners,
+        [
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "Dark BG",
+            "message" => "Foreground should be white on dark background",
+            "background_color" => "000000",
+            "plugin_outlet" => "above-site-header",
+            "carousel" => false,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+          {
+            "enabled_groups" => [0],
+            "selected_categories" => [],
+            "title" => "Light BG",
+            "message" => "Foreground should be black on light background",
+            "background_color" => "FFFFFF",
+            "plugin_outlet" => "below-site-header",
+            "carousel" => false,
+            "dismissable" => false,
+            "date_after" => "",
+            "date_before" => "",
+          },
+        ].to_json,
+      )
+      theme_component.save!
+    end
+
+    it "sets inline styles for background and foreground color based on luminance" do
+      visit "/"
+
+      dark = find(".notification-banner", text: "Dark BG", match: :first)
+      expect(dark[:style]).to include("background-color: #000000")
+      expect(dark[:style]).to match(/color: #FFFFFF|color: rgb\(255, 255, 255\)/)
+
+      light = find(".notification-banner", text: "Light BG", match: :first)
+      expect(light[:style]).to include("background-color: #FFFFFF")
+      expect(light[:style]).to match(/color: #000000|color: rgb\(0, 0, 0\)/)
     end
   end
 end
