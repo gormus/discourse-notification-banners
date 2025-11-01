@@ -126,7 +126,7 @@ export default class NotificationBanners extends Component {
   <template>
     {{#if this.enabledCarouselBanners}}
       <section
-        class="splide"
+        class="splide notification-banners--{{@outlet}}"
         aria-label="Notification banners"
         aria-roledescription="carousel"
         role="group"
@@ -145,7 +145,7 @@ export default class NotificationBanners extends Component {
     {{/if}}
 
     {{#if this.enabledSoloBanners}}
-      <section>
+      <section class="notification-banners--{{@outlet}}">
         {{#each this.enabledSoloBanners as |banner|}}
           <NotificationBanner @banner={{banner}} />
         {{/each}}

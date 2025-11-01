@@ -96,6 +96,7 @@ export default apiInitializer((api) => {
       outlet,
       <template>
         <NotificationBanners
+          @outlet={{outlet}}
           @carouselBanners={{carouselBanners}}
           @soloBanners={{soloBanners}}
           @splideOptions={{splideOptions}}
@@ -105,10 +106,12 @@ export default apiInitializer((api) => {
   });
 
   loadScript(settings.theme_uploads.splide_js).then(() => {
-    const splideElements = document.querySelectorAll(".splide");
-    if (splideElements.length > 0) {
+    const el = document.querySelectorAll(
+      ".splide.notification-banners--above-site-header, .splide.notification-banners--below-site-header, .splide.notification-banners--top-notices"
+    );
+    el.forEach((carousel) => {
       // eslint-disable-next-line no-undef
-      new Splide(".splide").mount();
-    }
+      new Splide(carousel).mount();
+    });
   });
 });
