@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.3.0](https://github.com/gormus/discourse-notification-banners/compare/v1.2.4...v1.3.0) (2025-11-01)
+
+
+### Features
+
+* refactored code; changed `Audience` behavior; changed Splide defaults ([#24](https://github.com/gormus/discourse-notification-banners/issues/24)) ([902882f](https://github.com/gormus/discourse-notification-banners/commit/902882fc47d40eb0233aedb8b6e369412a95fe9f))
+* **tests:** added tests ([902882f](https://github.com/gormus/discourse-notification-banners/commit/902882fc47d40eb0233aedb8b6e369412a95fe9f))
+
+
+### Miscellaneous Chores
+
+* fixed indendations ([902882f](https://github.com/gormus/discourse-notification-banners/commit/902882fc47d40eb0233aedb8b6e369412a95fe9f))
+
+
+### Code Refactoring
+
+* **components:** moved components out from the gjs file ([902882f](https://github.com/gormus/discourse-notification-banners/commit/902882fc47d40eb0233aedb8b6e369412a95fe9f))
+
 ## 1.2.4 (2025-08-18)
 
 **Full Changelog**: https://github.com/gormus/discourse-notification-banners/compare/v1.2.3...v1.2.4
