@@ -49,7 +49,7 @@ export default class NotificationBanners extends Component {
 
     return (
       currentRoute.name === "discovery.category" &&
-      banner.selected_categories.includes(categoryId)
+      banner.selected_categories?.includes(categoryId)
     );
   }
 
