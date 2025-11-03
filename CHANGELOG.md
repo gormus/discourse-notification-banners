@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/gormus/discourse-notification-banners/compare/v1.3.0...v1.3.1) (2025-11-03)
+
+
+### Bug Fixes
+
+* use optional chaining ([#26](https://github.com/gormus/discourse-notification-banners/issues/26)) ([3e88b3d](https://github.com/gormus/discourse-notification-banners/commit/3e88b3d1c5dd97bc595e8a602829eac8ac49120a))
+
 ## [1.3.0](https://github.com/gormus/discourse-notification-banners/compare/v1.2.4...v1.3.0) (2025-11-01)
 
 
