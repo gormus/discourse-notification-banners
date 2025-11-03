@@ -41,7 +41,7 @@ export default class NotificationBanners extends Component {
   }
 
   #matchedCategory(banner, currentRoute) {
-    if (banner.selected_categories.length === 0) {
+    if (banner.selected_categories?.length === 0) {
       return true;
     }
 
@@ -49,13 +49,13 @@ export default class NotificationBanners extends Component {
 
     return (
       currentRoute.name === "discovery.category" &&
-      banner.selected_categories.includes(categoryId)
+      banner.selected_categories?.includes(categoryId)
     );
   }
 
   #matchedAudience(banner) {
     // If no groups are specified, allow the banner
-    if (banner.enabled_groups.length === 1 && banner.enabled_groups[0] === 0) {
+    if (banner.enabled_groups?.length === 1 && banner.enabled_groups[0] === 0) {
       return true;
     }
 
