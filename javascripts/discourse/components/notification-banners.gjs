@@ -41,7 +41,10 @@ export default class NotificationBanners extends Component {
   }
 
   #matchedCategory(banner, currentRoute) {
-    if (banner.selected_categories?.length === 0) {
+    if (
+      !("selected_categories" in banner) ||
+      banner.selected_categories?.length === 0
+    ) {
       return true;
     }
 
