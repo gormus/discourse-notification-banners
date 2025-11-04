@@ -17,6 +17,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Test Banner",
@@ -46,6 +47,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Dismiss Me",
@@ -76,6 +78,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Future Banner",
@@ -103,6 +106,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [group.id],
             "selected_categories" => [],
             "title" => "Group Banner",
@@ -136,6 +140,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [category.id],
             "title" => "Category Banner",
@@ -167,6 +172,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Carousel One",
@@ -179,6 +185,7 @@ RSpec.describe "Notification Banners", system: true do
             "date_before" => "",
           },
           {
+            "id" => "AH-002",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Carousel Two",
@@ -209,6 +216,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Single Carousel",
@@ -238,6 +246,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Above Header",
@@ -250,6 +259,7 @@ RSpec.describe "Notification Banners", system: true do
             "date_before" => "",
           },
           {
+            "id" => "BH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Below Header",
@@ -262,6 +272,7 @@ RSpec.describe "Notification Banners", system: true do
             "date_before" => "",
           },
           {
+            "id" => "TN-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Top Notices",
@@ -292,6 +303,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "No Admin",
@@ -320,6 +332,7 @@ RSpec.describe "Notification Banners", system: true do
         :banners,
         [
           {
+            "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Dark BG",
@@ -332,6 +345,7 @@ RSpec.describe "Notification Banners", system: true do
             "date_before" => "",
           },
           {
+            "id" => "BH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Light BG",
