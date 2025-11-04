@@ -61,10 +61,11 @@ function normalizeName(outlet) {
 
 function slugify(str) {
   str = str
+    .trim() // trim leading/trailing white space
     .replace(/[^a-zA-Z0-9 -]/g, "") // remove any non-alphanumeric characters
     .replace(/\s+/g, "-") // replace spaces with hyphens
     .replace(/-+/g, "-") // remove consecutive hyphens
-    .replace(/^\s+|\s+$/g, ""); // trim leading/trailing white space
+    .padEnd(6, "0");
   return str;
 }
 
