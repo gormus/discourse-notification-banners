@@ -4,8 +4,14 @@ banners:
   type: objects
   schema:
     name: Banner message
-    identifier: title
+    identifier: id
     properties:
+      id:
+        type: string
+        required: true
+        validations:
+          min_length: 6
+          max_length: 6
       enabled_groups:
         type: groups
         required: true
@@ -41,18 +47,29 @@ banners:
       date_before:
         type: string
 
+banner_config_version:
+  type: string
+  default: "2025-11-04"
+  min: 3
+  max: 15
+  description: "When important changes are made to the banners, you must change this value to reset the banner visibility. This change ensures all your users see previously dismissed banners."
+  refresh: true
+
 splide_options__above_site_header:
   type: string
   default: "{ \"autoHeight\": true, \"height\": \"8rem\", \"arrows\": false, \"autoplay\": true, \"direction\": \"ttb\", \"focus\": \"center\", \"gap\": 0, \"type\": \"loop\" }"
   description: "<a href=\"https://splidejs.com/guides/options/\" target=\"_blank\">Splide options</a> for banners above the site header"
+  textarea: true
   refresh: true
 splide_options__below_site_header:
   type: string
   default: "{ \"autoHeight\": true, \"height\": \"8rem\", \"arrows\": false, \"autoplay\": true, \"direction\": \"ttb\", \"focus\": \"center\", \"gap\": 0, \"type\": \"loop\" }"
   description: "<a href=\"https://splidejs.com/guides/options/\" target=\"_blank\">Splide options</a> for banners below the site header"
+  textarea: true
   refresh: true
 splide_options__top_notices:
   type: string
   default: "{ \"autoHeight\": true, \"height\": \"8rem\", \"arrows\": false, \"autoplay\": true, \"direction\": \"ttb\", \"focus\": \"center\", \"gap\": 0, \"type\": \"loop\" }"
   description: "<a href=\"https://splidejs.com/guides/options/\" target=\"_blank\">Splide options</a> for banners in top notices"
+  textarea: true
   refresh: true

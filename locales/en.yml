@@ -6,6 +6,9 @@ en:
         description: Add notification banners to your site
         schema:
           properties:
+            id:
+              label: Banner ID
+              description: "A unique identifier for the banner. Used for dismissed banners.<br>6 characters; only a-z, A-Z, 0-9, and hyphens."
             enabled_groups:
               label: Audience
               description: "Select which user groups can see this banner. You must select at least one group.\n\n <b>To show to all users and visitors:</b> Select the <code>everyone</code> group.\n\n <b>Important note on Trust Levels:</b> Selecting a Trust Level (e.g., <code>trust_level_3</code>) will show the banner <b>only</b> to users at that exact level. It does not include users at higher or lower levels."
