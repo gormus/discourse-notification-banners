@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/gormus/discourse-notification-banners/compare/v1.3.2...v1.4.0) (2025-11-04)
+
+
+### Features
+
+* change banner ID patterns used for dismissal ([#30](https://github.com/gormus/discourse-notification-banners/issues/30)) ([a1a28e6](https://github.com/gormus/discourse-notification-banners/commit/a1a28e66ede06e767a275bdf636570d4f376e742))
+
 ## [1.3.2](https://github.com/gormus/discourse-notification-banners/compare/v1.3.1...v1.3.2) (2025-11-04)
 
 
