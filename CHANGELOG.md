@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.2](https://github.com/gormus/discourse-notification-banners/compare/v1.3.1...v1.3.2) (2025-11-04)
+
+
+### Bug Fixes
+
+* allow access if no categories selected ([#28](https://github.com/gormus/discourse-notification-banners/issues/28)) ([5cb41e1](https://github.com/gormus/discourse-notification-banners/commit/5cb41e10e7c12881167c533a57247fb06e66dccc))
+
 ## [1.3.1](https://github.com/gormus/discourse-notification-banners/compare/v1.3.0...v1.3.1) (2025-11-03)
 
 
