@@ -62,14 +62,16 @@ function normalizeName(outlet) {
 export default apiInitializer((api) => {
   loadSplideCSS();
 
-  const banners = [...settings.banners].reduce((acc, banner, index) => {
+  const bannerConfigVersion = settings.banner_config_version;
+
+  const banners = [...settings.banners].reduce((acc, banner) => {
     const outlet = banner.plugin_outlet;
     const type = banner.carousel ? "carousel" : "solo";
 
     // Create new object instead of mutating
     const processedBanner = {
       ...banner,
-      id: `notification-banner--${index}--${outlet}`,
+      id: `notification-banner--${banner.id}--${bannerConfigVersion}`,
       styles: bannerStyles(banner.background_color),
     };
 
