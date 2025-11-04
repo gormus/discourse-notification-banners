@@ -59,6 +59,15 @@ function normalizeName(outlet) {
   return outlet.replaceAll("-", "_");
 }
 
+function slugify(str) {
+  str = str
+    .replace(/[^a-zA-Z0-9 -]/g, "") // remove any non-alphanumeric characters
+    .replace(/\s+/g, "-") // replace spaces with hyphens
+    .replace(/-+/g, "-") // remove consecutive hyphens
+    .replace(/^\s+|\s+$/g, ""); // trim leading/trailing white space
+  return str;
+}
+
 export default apiInitializer((api) => {
   loadSplideCSS();
 
@@ -71,7 +80,7 @@ export default apiInitializer((api) => {
     // Create new object instead of mutating
     const processedBanner = {
       ...banner,
-      id: `notification-banner--${banner.id}--${bannerConfigVersion}`,
+      id: `notification-banner--${slugify(banner.id)}--${bannerConfigVersion}`,
       styles: bannerStyles(banner.background_color),
     };
 
