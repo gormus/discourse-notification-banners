@@ -20,7 +20,7 @@ en:
               description: "Also display the banner on subcategories of the selected categories."
             icon:
               label: Icon
-              description: "Optional icon displayed to the left of the title. Enter a Font Awesome 6 icon name, e.g. <code>calendar-days</code>. Only icons already used by Discourse core will work by default — others must be added under Admin &gt; Customize &gt; Icons."
+              description: "Optional icon displayed to the left of the banner title."
             title:
               label: Title
               description: "Notification banner title, displayed in a H2 heading."

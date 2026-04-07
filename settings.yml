@@ -22,7 +22,25 @@ banners:
       include_subcategories:
         type: boolean
       icon:
-        type: string
+        type: enum
+        choices:
+          - ""
+          - "bell"
+          - "bullhorn"
+          - "calendar-days"
+          - "circle-check"
+          - "circle-info"
+          - "circle-xmark"
+          - "clock"
+          - "envelope"
+          - "flag"
+          - "heart"
+          - "link"
+          - "star"
+          - "thumbs-up"
+          - "triangle-exclamation"
+          - "users"
+          - "wrench"
       title:
         type: string
       message:
