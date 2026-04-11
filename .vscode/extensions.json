@@ -6,7 +6,6 @@
     "dbaeumer.vscode-eslint",
     "lifeart.vscode-glimmer-syntax",
     "typed-ember.glint2-vscode",
-    "stylelint.vscode-stylelint",
-    "editorconfig.editorconfig",
+    "stylelint.vscode-stylelint"
   ]
 }
