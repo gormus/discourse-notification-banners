@@ -7,13 +7,13 @@ import DButton from "discourse/components/d-button";
 
 export default class NotificationBanner extends Component {
   @tracked
-  dismissed = this.args.banner.dismissable
+  dismissed = this.args.banner.dismissible
     ? localStorage.getItem(this.args.banner.id)
     : false;
 
   @action
   dismiss() {
-    if (!this.args.banner.dismissable) {
+    if (!this.args.banner.dismissible) {
       return;
     }
     this.dismissed = true;
@@ -32,7 +32,7 @@ export default class NotificationBanner extends Component {
         style={{htmlSafe @banner.styles}}
       >
         <div class="notification-banner__wrapper wrap">
-          {{#if @banner.dismissable}}
+          {{#if @banner.dismissible}}
             <div class="notification-banner__close">
               <DButton
                 @icon="xmark"
