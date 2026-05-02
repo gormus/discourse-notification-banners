@@ -8,19 +8,21 @@
     "url": "https://github.com/gormus/discourse-notification-banners.git"
   },
   "scripts": {
-    "lint": "concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
-    "lint:fix": "concurrently \"pnpm:lint:*:fix\" --names \"fix:\"",
-    "lint:css": "pnpm stylelint 'common/**/*.scss' 'stylesheets/**/*.scss'",
-    "lint:css:fix": "pnpm stylelint --fix 'common/**/*.scss' 'stylesheets/**/*.scss'",
-    "lint:js": "eslint ./javascripts --cache --no-error-on-unmatched-pattern",
-    "lint:js:fix": "eslint --fix ./javascripts --no-error-on-unmatched-pattern",
-    "lint:hbs": "ember-template-lint 'javascripts/**/*.{gjs,hbs}'",
-    "lint:hbs:fix": "ember-template-lint 'javascripts/**/*.{gjs,hbs}' --fix",
-    "lint:prettier": "pnpm prettier --list-different 'common/**/*.scss' 'stylesheets/**/*.scss' 'javascripts/**/*.{js,gjs,hbs,css}'",
-    "lint:prettier:fix": "pnpm prettier -w --no-error-on-unmatched-pattern 'common/**/*.scss' 'stylesheets/**/*.scss' 'javascripts/**/*.{js,gjs,hbs,css}'",
     "commit": "commit",
     "commitlint": "commitlint --edit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint": "concurrently \"pnpm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:fix": "concurrently \"pnpm:lint:*:fix\" --names \"fix:\"",
+    "lint:css": "pnpm stylelint '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' --allow-empty-input",
+    "lint:css:fix": "pnpm stylelint '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' --fix --allow-empty-input",
+    "lint:js": "eslint {javascripts,test} --cache --no-error-on-unmatched-pattern",
+    "lint:js:fix": "eslint {javascripts,test} --fix --no-error-on-unmatched-pattern",
+    "lint:hbs": "ember-template-lint 'javascripts/**/*.gjs' --no-error-on-unmatched-pattern",
+    "lint:hbs:fix": "ember-template-lint 'javascripts/**/*.gjs' --fix --no-error-on-unmatched-pattern",
+    "lint:prettier": "pnpm prettier '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' '{javascripts,test}/**/*.{js,gjs}' --check --no-error-on-unmatched-pattern",
+    "lint:prettier:fix": "pnpm prettier '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' '{javascripts,test}/**/*.{js,gjs}' -w --no-error-on-unmatched-pattern",
+    "lint:types": "ember-tsc -b",
+    "lttf:ignore": "lint-to-the-future ignore"
   },
   "lint-staged": {
     "{common,stylesheets}/**/*.{css,scss}": "pnpm run lint:css:fix",
@@ -29,23 +31,27 @@
     "{common,stylesheets,javascripts}/**/*.{js,gjs,hbs,css,scss}": "pnpm run lint:prettier:fix"
   },
   "devDependencies": {
-    "@commitlint/cli": "20.1.0",
-    "@commitlint/config-conventional": "20.0.0",
-    "@commitlint/prompt-cli": "20.1.0",
-    "@discourse/lint-configs": "2.32.0",
-    "concurrently": "9.2.1",
-    "ember-template-lint": "7.9.1",
-    "eslint": "9.37.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
+    "@commitlint/prompt-cli": "^20.5.3",
+    "@discourse/lint-configs": "2.45.0",
+    "@glint/ember-tsc": "1.5.0",
+    "concurrently": "^9.2.1",
+    "discourse": "npm:@discourse/types@2026.3.0-887c5be4",
+    "ember-template-lint": "7.9.3",
+    "eslint": "9.39.2",
     "husky": "9.1.7",
-    "lint-staged": "16.2.4",
-    "prettier": "3.6.2",
-    "stylelint": "16.25.0"
+    "lint-staged": "16.4.0",
+    "lint-to-the-future": "^2.6.4",
+    "lint-to-the-future-eslint": "^3.3.0",
+    "prettier": "3.8.1",
+    "stylelint": "17.4.0"
   },
   "engines": {
     "node": ">= 22",
     "npm": "please-use-pnpm",
     "yarn": "please-use-pnpm",
-    "pnpm": "9.x"
+    "pnpm": "^10"
   },
-  "packageManager": "pnpm@9.15.5"
+  "packageManager": "pnpm@10.28.0"
 }
