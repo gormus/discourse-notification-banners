@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.5.0](https://github.com/gormus/discourse-notification-banners/compare/v1.4.0...v1.5.0) (2026-05-02)
+
+
+### Features
+
+* use datetime type for date_after and date_before fields ([#46](https://github.com/gormus/discourse-notification-banners/issues/46)) ([87960be](https://github.com/gormus/discourse-notification-banners/commit/87960beba1ec939fb230284e1ac25dd2848db0c4))
+
+
+### Miscellaneous Chores
+
+* **deps-dev:** bump activesupport from 8.1.2 to 8.1.2.1 ([#45](https://github.com/gormus/discourse-notification-banners/issues/45)) ([68a329d](https://github.com/gormus/discourse-notification-banners/commit/68a329df1e1b482aa37ef25837d980b327207aaa))
+* **deps-dev:** bump mcp from 0.8.0 to 0.9.2 ([#43](https://github.com/gormus/discourse-notification-banners/issues/43)) ([db47b11](https://github.com/gormus/discourse-notification-banners/commit/db47b1134175d6419d0cab018863b4815bc4cd4d))
+* **deps-dev:** bump rack from 3.2.5 to 3.2.6 ([#35](https://github.com/gormus/discourse-notification-banners/issues/35)) ([b17670a](https://github.com/gormus/discourse-notification-banners/commit/b17670af41576e704f0845bd556d907bb7b2b609))
+* fix typos ([#39](https://github.com/gormus/discourse-notification-banners/issues/39)) ([29b15f9](https://github.com/gormus/discourse-notification-banners/commit/29b15f97a33b9700554470791e0802687d55f072))
+* update scaffolding and lint files ([#41](https://github.com/gormus/discourse-notification-banners/issues/41)) ([05efe27](https://github.com/gormus/discourse-notification-banners/commit/05efe2727e2726f023f360a2718a74d21af92064))
+
 ## [1.4.0](https://github.com/gormus/discourse-notification-banners/compare/v1.3.2...v1.4.0) (2025-11-04)
 
 
