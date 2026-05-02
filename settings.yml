@@ -43,9 +43,9 @@ banners:
       dismissable:
         type: boolean
       date_after:
-        type: string
+        type: datetime
       date_before:
-        type: string
+        type: datetime
 
 banner_config_version:
   type: string

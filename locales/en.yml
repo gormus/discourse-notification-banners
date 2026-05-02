@@ -35,7 +35,7 @@ en:
               description: "Allow users to dismiss the banner by closing it.\nNote: When \"caraousel\" is enabled, this setting will be ignored."
             date_after:
               label: Starting date
-              description: "Display banner from this date on (optional) 2024-08-15 18:00:00Z"
+              description: "Display banner from this date on (optional)"
             date_before:
               label: Last date
-              description: "Display banner until this date (optional) 2024-12-01 10:00:00Z"
+              description: "Display banner until this date (optional)"
