@@ -40,7 +40,7 @@ banners:
           - "top-notices"
       carousel:
         type: boolean
-      dismissable:
+      dismissible:
         type: boolean
       date_after:
         type: datetime

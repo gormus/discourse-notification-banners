@@ -28,10 +28,10 @@ Each notification banner may have the following features:
 * **Message**, 500 character long simple notification message. Markdown is supported.
 * **Audience**, select the user groups as audience for the notification.
 * **Categories**; select categories to display the banner on. Leave empty to display on all categories.
-* **Background color**, can be set to differantiate the banner from others.
+* **Background color**, can be set to differentiate the banner from others.
 * **Plugin outlet**, set notifications above or below the site header, or use the top-notices outlet to display along with native topic banners.
 * **Display in a carousel**, when selected, all the banners in each outlet are displayed in a carousel. Requires minimum 2 banners to be selected for any outlet.
-* **Dismissable**, when selected, the users will be able to dismiss the banner, and it will be hidden for them.
+* **Dismissible**, when selected, the users will be able to dismiss the banner, and it will be hidden for them.
 * **Starting and Last dates**, when defined, banner's visibility obeys to those dates. So you can set a banner in advance, but it will become visible to selected audience only on set date and time; or similarly you can automatically remove the banner by the last date it should show.
 * **Display order**, define which banner should be displayed top, which should be at bottom.
 
