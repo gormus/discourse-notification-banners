@@ -25,7 +25,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "ff0000",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
-            "dismissable" => true,
+            "dismissible" => true,
             "date_after" => "",
             "date_before" => "",
           },
@@ -41,7 +41,7 @@ RSpec.describe "Notification Banners", system: true do
     end
   end
 
-  context "when a notification banner is dismissable" do
+  context "when a notification banner is dismissible" do
     before do
       theme_component.update_setting(
         :banners,
@@ -51,11 +51,11 @@ RSpec.describe "Notification Banners", system: true do
             "enabled_groups" => [0],
             "selected_categories" => [],
             "title" => "Dismiss Me",
-            "message" => "Dismissable banner",
+            "message" => "Dismissible banner",
             "background_color" => "00ff00",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
-            "dismissable" => true,
+            "dismissible" => true,
             "date_after" => "",
             "date_before" => "",
           },
@@ -66,9 +66,9 @@ RSpec.describe "Notification Banners", system: true do
 
     it "should allow dismissing the banner" do
       visit "/"
-      expect(page).to have_css(".notification-banner", text: "Dismissable banner")
+      expect(page).to have_css(".notification-banner", text: "Dismissible banner")
       find(".notification-banner__close .close").click
-      expect(page).to have_no_css(".notification-banner", text: "Dismissable banner")
+      expect(page).to have_no_css(".notification-banner", text: "Dismissible banner")
     end
   end
 
@@ -86,7 +86,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "0000ff",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => 1.day.from_now.iso8601,
             "date_before" => 2.days.from_now.iso8601,
           },
@@ -114,7 +114,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "123456",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -148,7 +148,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "abcdef",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -180,7 +180,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "111111",
             "plugin_outlet" => "above-site-header",
             "carousel" => true,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -193,7 +193,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "222222",
             "plugin_outlet" => "above-site-header",
             "carousel" => true,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -224,7 +224,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "333333",
             "plugin_outlet" => "above-site-header",
             "carousel" => true,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -254,7 +254,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "444444",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -267,7 +267,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "555555",
             "plugin_outlet" => "below-site-header",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -280,7 +280,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "666666",
             "plugin_outlet" => "top-notices",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -311,7 +311,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "777777",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -340,7 +340,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "000000",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },
@@ -353,7 +353,7 @@ RSpec.describe "Notification Banners", system: true do
             "background_color" => "FFFFFF",
             "plugin_outlet" => "below-site-header",
             "carousel" => false,
-            "dismissable" => false,
+            "dismissible" => false,
             "date_after" => "",
             "date_before" => "",
           },

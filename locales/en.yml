@@ -30,7 +30,7 @@ en:
             carousel:
               label: Display in a Carousel
               description: "Enables a carousel for all the banners in the same plugin outlet. When left unchecked, the banner will be displayed as a stack."
-            dismissable:
+            dismissible:
               label: Dismissible
               description: "Allow users to dismiss the banner by closing it.\nNote: When \"caraousel\" is enabled, this setting will be ignored."
             date_after:
