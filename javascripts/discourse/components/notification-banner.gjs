@@ -1,9 +1,9 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
-import { htmlSafe } from "@ember/template";
-import CookText from "discourse/components/cook-text";
-import DButton from "discourse/components/d-button";
+import { trustHTML } from "@ember/template";
+import DButton from "discourse/ui-kit/d-button";
+import DCookText from "discourse/ui-kit/d-cook-text";
 
 export default class NotificationBanner extends Component {
   @tracked
@@ -29,7 +29,7 @@ export default class NotificationBanner extends Component {
       <div
         id={{@banner.id}}
         class="notification-banner"
-        style={{htmlSafe @banner.styles}}
+        style={{trustHTML @banner.styles}}
       >
         <div class="notification-banner__wrapper wrap">
           {{#if @banner.dismissible}}
@@ -46,7 +46,7 @@ export default class NotificationBanner extends Component {
             {{#if @banner.title}}
               <h2 class="notification-banner__header">{{@banner.title}}</h2>
             {{/if}}
-            <CookText @rawText={{@banner.message}} />
+            <DCookText @rawText={{@banner.message}} />
           </div>
         </div>
       </div>
