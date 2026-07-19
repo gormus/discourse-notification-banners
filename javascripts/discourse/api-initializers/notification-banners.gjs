@@ -1,5 +1,4 @@
 import { apiInitializer } from "discourse/lib/api";
-import loadScript from "discourse/lib/load-script";
 import NotificationBanners from "../components/notification-banners";
 
 // Cache for color calculations to avoid redundant computations
@@ -115,15 +114,5 @@ export default apiInitializer((api) => {
         />
       </template>
     );
-  });
-
-  loadScript(settings.theme_uploads.splide_js).then(() => {
-    const el = document.querySelectorAll(
-      ".splide.notification-banners--above-site-header, .splide.notification-banners--below-site-header, .splide.notification-banners--top-notices"
-    );
-    el.forEach((carousel) => {
-      // eslint-disable-next-line no-undef
-      new Splide(carousel).mount();
-    });
   });
 });

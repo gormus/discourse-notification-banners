@@ -2,9 +2,10 @@ import Component from "@glimmer/component";
 import { cached, tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
 import { service } from "@ember/service";
+import { modifier } from "ember-modifier";
+import { AUTO_GROUPS } from "discourse/lib/constants";
+import loadScript from "discourse/lib/load-script";
 import NotificationBanner from "./notification-banner";
-
-const TL_GROUPS = [10, 11, 12, 13, 14];
 
 export default class NotificationBanners extends Component {
   @service currentUser;
@@ -12,6 +13,28 @@ export default class NotificationBanners extends Component {
 
   @tracked enabledCarouselBanners = [];
   @tracked enabledSoloBanners = [];
+
+  setupSplide = modifier((element) => {
+    // The carouselKey argument (passed in the template) is read here so this
+    // modifier tears down and re-mounts Splide whenever the set of visible
+    // carousel banners changes (e.g. on route changes). This keeps Splide in
+    // sync with the DOM that Ember renders from the {{#each}} below.
+    let splide;
+    let destroyed = false;
+
+    loadScript(settings.theme_uploads.splide_js).then(() => {
+      if (destroyed) {
+        return;
+      }
+      // eslint-disable-next-line no-undef
+      splide = new Splide(element).mount();
+    });
+
+    return () => {
+      destroyed = true;
+      splide?.destroy(true);
+    };
+  });
 
   constructor() {
     super(...arguments);
@@ -57,16 +80,15 @@ export default class NotificationBanners extends Component {
   }
 
   #matchedAudience(banner) {
-    // If no groups are specified, allow the banner
-    if (banner.enabled_groups?.length === 1 && banner.enabled_groups[0] === 0) {
-      return true;
-    }
+    const audience = banner.enabled_groups ?? [AUTO_GROUPS.everyone.id];
 
-    // If groups are specified, check if user has any of them
-    const userGroupsSet = this.currentUserGroupsSet;
-    return banner.enabled_groups
-      .filter((group) => group !== 0)
-      .some((group) => userGroupsSet.has(group));
+    const userGroups = new Set(this.currentUserGroups);
+    for (const groupId of audience) {
+      if (userGroups.has(groupId)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   #withinDateRange(banner, now) {
@@ -100,25 +122,30 @@ export default class NotificationBanners extends Component {
   @cached
   get currentUserGroups() {
     if (!this.currentUser) {
-      return [0];
+      return [AUTO_GROUPS.everyone.id, AUTO_GROUPS.anonymous_users.id];
     }
 
-    const allGroups = this.currentUser.groups.map((group) => group.id);
-    const tlGroups = allGroups.filter((g) => TL_GROUPS.includes(g));
-    const highestTl = tlGroups.length > 0 ? [Math.max(...tlGroups)] : [];
-    const nonTlGroups = allGroups.filter((group) => !tlGroups.includes(group));
+    const userGroups = (this.currentUser.groups ?? [])
+      .filter((g) => !g.name.startsWith("trust_level_"))
+      .map((g) => g.id);
 
-    return [...highestTl, ...nonTlGroups];
+    userGroups.push(
+      AUTO_GROUPS[`trust_level_${this.currentUser.trust_level}`].id
+    );
+    userGroups.push(AUTO_GROUPS.everyone.id);
+    userGroups.push(AUTO_GROUPS.logged_in_users.id);
+
+    return userGroups;
   }
 
-  @cached
-  get currentUserGroupsSet() {
-    return new Set(this.currentUserGroups);
+  get carouselKey() {
+    return this.enabledCarouselBanners.map((banner) => banner.id).join(",");
   }
 
   @action
   setBanners() {
     if (this.carouselBanners.length < 2) {
+      this.enabledCarouselBanners = [];
       this.enabledSoloBanners = [...this.soloBanners, ...this.carouselBanners];
     } else {
       this.enabledCarouselBanners = this.carouselBanners;
@@ -127,13 +154,14 @@ export default class NotificationBanners extends Component {
   }
 
   <template>
-    {{#if this.enabledCarouselBanners}}
+    {{#if this.enabledCarouselBanners.length}}
       <section
         class="splide notification-banners--{{@outlet}}"
         aria-label="Notification banners"
         aria-roledescription="carousel"
         role="group"
         data-splide={{@splideOptions}}
+        {{this.setupSplide this.carouselKey}}
       >
         <div class="splide__track">
           <ul class="splide__list">
@@ -147,7 +175,7 @@ export default class NotificationBanners extends Component {
       </section>
     {{/if}}
 
-    {{#if this.enabledSoloBanners}}
+    {{#if this.enabledSoloBanners.length}}
       <section class="notification-banners--{{@outlet}}">
         {{#each this.enabledSoloBanners as |banner|}}
           <NotificationBanner @banner={{banner}} />
