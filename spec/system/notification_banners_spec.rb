@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe "Notification Banners", system: true do
+RSpec.describe "Notification Banners" do
   let!(:theme_component) { upload_theme_component }
   fab!(:category)
   fab!(:group)
@@ -127,7 +127,7 @@ RSpec.describe "Notification Banners", system: true do
 
     it "displays the banner only to users in the targeted group" do
       fab!(:member_user) { Fabricate(:user, groups: [targeted_group]) }
-      fab!(:non_member_user) { Fabricate(:user) }
+      fab!(:non_member_user, :user)
 
       sign_in(member_user)
       visit "/"
@@ -589,7 +589,7 @@ RSpec.describe "Notification Banners", system: true do
   end
 
   context "when multiple filters and carousel rules are combined" do
-    fab!(:secondary_category) { Fabricate(:category) }
+    fab!(:secondary_category, :category)
 
     before do
       sign_in(user)
