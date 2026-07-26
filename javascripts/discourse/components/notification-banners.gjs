@@ -22,29 +22,37 @@ export default class NotificationBanners extends Component {
     let splide;
     let destroyed = false;
 
-    loadScript(settings.theme_uploads.splide_js).then(() => {
-      if (destroyed) {
-        return;
-      }
-      // eslint-disable-next-line no-undef
-      splide = new Splide(element).mount();
-    });
+    loadScript(settings.theme_uploads.splide_css, { css: true });
+    loadScript(settings.theme_uploads.splide_js)
+      .then(() => {
+        if (destroyed) {
+          return;
+        }
+        // eslint-disable-next-line no-undef
+        splide = new Splide(element).mount();
+      })
+      .catch(() => {
+        // Splide failed to load; silently skip — no carousel will render
+      });
 
     return () => {
       destroyed = true;
       splide?.destroy(true);
     };
   });
+  // Cached reference for proper router listener binding/unbinding
+  _boundSetBanners = null;
 
   constructor() {
     super(...arguments);
+    this._boundSetBanners = this.setBanners.bind(this);
     this.setBanners();
-    this.router.on("routeDidChange", this.setBanners);
+    this.router.on("routeDidChange", this._boundSetBanners);
   }
 
   willDestroy() {
     super.willDestroy(...arguments);
-    this.router.off("routeDidChange", this.setBanners);
+    this.router.off("routeDidChange", this._boundSetBanners);
   }
 
   #filterBanners(banner) {
@@ -54,7 +62,6 @@ export default class NotificationBanners extends Component {
     return (
       !this.#adminRoute(currentRoute) &&
       this.#matchedCategory(banner, currentRoute) &&
-      this.#matchedAudience(banner) &&
       this.#withinDateRange(banner, now)
     );
   }
@@ -71,6 +78,9 @@ export default class NotificationBanners extends Component {
       return true;
     }
 
+    // Category-targeted banners only display when the user is on the exact
+    // category page — they will not appear on the home page or other routes,
+    // even if the user belongs to the target category.
     const categoryId = currentRoute.attributes?.category?.id;
 
     return (
@@ -79,40 +89,44 @@ export default class NotificationBanners extends Component {
     );
   }
 
-  #matchedAudience(banner) {
-    const audience = banner.enabled_groups ?? [AUTO_GROUPS.everyone.id];
-
-    const userGroups = new Set(this.currentUserGroups);
-    for (const groupId of audience) {
-      if (userGroups.has(groupId)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   #withinDateRange(banner, now) {
-    const startDate = banner.date_after ? Date.parse(banner.date_after) : null;
-    const endDate = banner.date_before ? Date.parse(banner.date_before) : null;
+    const hasStartDate =
+      typeof banner.date_after === "string" && banner.date_after;
+    const hasEndDate =
+      typeof banner.date_before === "string" && banner.date_before;
+    const startDate = hasStartDate ? Date.parse(banner.date_after) : null;
+    const endDate = hasEndDate ? Date.parse(banner.date_before) : null;
 
-    if (startDate && now < startDate) {
+    // If a date bound is configured but invalid, fail closed to avoid accidental overexposure.
+    if (hasStartDate && !Number.isFinite(startDate)) {
       return false;
     }
-    if (endDate && now > endDate) {
+
+    if (hasEndDate && !Number.isFinite(endDate)) {
+      return false;
+    }
+
+    if (Number.isFinite(startDate) && now < startDate) {
+      return false;
+    }
+
+    if (Number.isFinite(endDate) && now > endDate) {
       return false;
     }
 
     return true;
   }
 
-  get carouselBanners() {
+  @cached
+  get carouselBannersFiltered() {
     if (!this.args.carouselBanners) {
       return [];
     }
     return this.args.carouselBanners.filter(this.#filterBanners.bind(this));
   }
 
-  get soloBanners() {
+  @cached
+  get soloBannersFiltered() {
     if (!this.args.soloBanners) {
       return [];
     }
@@ -144,12 +158,15 @@ export default class NotificationBanners extends Component {
 
   @action
   setBanners() {
-    if (this.carouselBanners.length < 2) {
+    const carouselBanners = this.carouselBannersFiltered;
+    const soloBanners = this.soloBannersFiltered;
+
+    if (carouselBanners.length < 2) {
       this.enabledCarouselBanners = [];
-      this.enabledSoloBanners = [...this.soloBanners, ...this.carouselBanners];
+      this.enabledSoloBanners = [...soloBanners, ...carouselBanners];
     } else {
-      this.enabledCarouselBanners = this.carouselBanners;
-      this.enabledSoloBanners = this.soloBanners;
+      this.enabledCarouselBanners = carouselBanners;
+      this.enabledSoloBanners = soloBanners;
     }
   }
 
@@ -167,7 +184,7 @@ export default class NotificationBanners extends Component {
           <ul class="splide__list">
             {{#each this.enabledCarouselBanners as |banner|}}
               <li class="splide__slide">
-                <NotificationBanner @banner={{banner}} />
+                <NotificationBanner @banner={{banner}} @inCarousel={{true}} />
               </li>
             {{/each}}
           </ul>

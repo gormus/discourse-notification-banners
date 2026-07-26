@@ -7,17 +7,33 @@ import DCookText from "discourse/ui-kit/d-cook-text";
 
 export default class NotificationBanner extends Component {
   @tracked
-  dismissed = this.args.banner.dismissible
-    ? localStorage.getItem(this.args.banner.id)
-    : false;
+  dismissed =
+    this.args.banner.dismissible && !this.args.inCarousel
+      ? (() => {
+          try {
+            return localStorage.getItem(this.args.banner.id);
+          } catch {
+            // localStorage may be unavailable (e.g., private browsing mode)
+            return null;
+          }
+        })()
+      : false;
+
+  get dismissible() {
+    return this.args.banner.dismissible && !this.args.inCarousel;
+  }
 
   @action
   dismiss() {
-    if (!this.args.banner.dismissible) {
+    if (!this.dismissible) {
       return;
     }
     this.dismissed = true;
-    return localStorage.setItem(this.args.banner.id, true);
+    try {
+      localStorage.setItem(this.args.banner.id, true);
+    } catch {
+      // localStorage may be unavailable; silently fail
+    }
   }
 
   get showBanner() {
@@ -32,7 +48,7 @@ export default class NotificationBanner extends Component {
         style={{trustHTML @banner.styles}}
       >
         <div class="notification-banner__wrapper wrap">
-          {{#if @banner.dismissible}}
+          {{#if this.dismissible}}
             <div class="notification-banner__close">
               <DButton
                 @icon="xmark"
