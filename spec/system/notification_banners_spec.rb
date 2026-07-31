@@ -102,8 +102,9 @@ RSpec.describe "Notification Banners" do
   end
 
   context "when using group targeting for visibility" do
+    fab!(:targeted_group) { Fabricate(:group) }
+
     before do
-      fab!(:targeted_group)
       theme_component.update_setting(
         :banners,
         [
@@ -125,10 +126,10 @@ RSpec.describe "Notification Banners" do
       theme_component.save!
     end
 
-    it "displays the banner only to users in the targeted group" do
-      fab!(:member_user) { Fabricate(:user, groups: [targeted_group]) }
-      fab!(:non_member_user, :user)
+    fab!(:member_user) { Fabricate(:user, groups: [targeted_group]) }
+    fab!(:non_member_user) { Fabricate(:user) }
 
+    it "displays the banner only to users in the targeted group" do
       sign_in(member_user)
       visit "/"
       expect(page).to have_css(".notification-banner", text: "Group Target Banner")
@@ -530,7 +531,7 @@ RSpec.describe "Notification Banners" do
     end
   end
 
-  context "when a banner has invalid date bounds" do
+  context "when a banner has out-of-range date bounds" do
     before do
       theme_component.update_setting(
         :banners,
@@ -539,27 +540,27 @@ RSpec.describe "Notification Banners" do
             "id" => "AH-001",
             "enabled_groups" => [0],
             "selected_categories" => [],
-            "title" => "Invalid Start Date",
-            "message" => "Invalid configured start date should hide this banner",
+            "title" => "Future Start Date",
+            "message" => "Start date is in the future so this banner is not yet active",
             "background_color" => "225588",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
             "dismissible" => false,
-            "date_after" => "not-a-date",
+            "date_after" => 1.day.from_now.iso8601,
             "date_before" => "",
           },
           {
             "id" => "AH-002",
             "enabled_groups" => [0],
             "selected_categories" => [],
-            "title" => "Invalid End Date",
-            "message" => "Invalid configured end date should hide this banner",
+            "title" => "Past End Date",
+            "message" => "End date is in the past so this banner has already expired",
             "background_color" => "336699",
             "plugin_outlet" => "above-site-header",
             "carousel" => false,
             "dismissible" => false,
             "date_after" => "",
-            "date_before" => "not-a-date",
+            "date_before" => 1.day.ago.iso8601,
           },
           {
             "id" => "AH-003",
@@ -579,11 +580,11 @@ RSpec.describe "Notification Banners" do
       theme_component.save!
     end
 
-    it "fails closed for invalid dates and keeps valid banners visible" do
+    it "hides banners outside their date range and shows banners within range" do
       visit "/"
 
-      expect(page).to have_no_css(".notification-banner", text: "Invalid Start Date")
-      expect(page).to have_no_css(".notification-banner", text: "Invalid End Date")
+      expect(page).to have_no_css(".notification-banner", text: "Future Start Date")
+      expect(page).to have_no_css(".notification-banner", text: "Past End Date")
       expect(page).to have_css(".notification-banner", text: "Valid Date")
     end
   end
