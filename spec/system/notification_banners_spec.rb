@@ -7,8 +7,7 @@ RSpec.describe "Notification Banners" do
   fab!(:user) { Fabricate(:user, groups: [group]) }
   let(:user_menu) { PageObjects::Components::UserMenu.new }
 
-  SiteSetting.theme_authorized_extensions =
-    "wasm|jpg|jpeg|png|woff|woff2|svg|eot|ttf|otf|gif|webp|avif|js|css"
+  SiteSetting.theme_authorized_extensions = "js|css"
 
   context "when displaying a notification banner for all users" do
     before do
@@ -102,7 +101,7 @@ RSpec.describe "Notification Banners" do
   end
 
   context "when using group targeting for visibility" do
-    fab!(:targeted_group) { Fabricate(:group) }
+    fab!(:targeted_group, :group)
 
     before do
       theme_component.update_setting(
@@ -127,7 +126,7 @@ RSpec.describe "Notification Banners" do
     end
 
     fab!(:member_user) { Fabricate(:user, groups: [targeted_group]) }
-    fab!(:non_member_user) { Fabricate(:user) }
+    fab!(:non_member_user, :user) { Fabricate(:user) }
 
     it "displays the banner only to users in the targeted group" do
       sign_in(member_user)
