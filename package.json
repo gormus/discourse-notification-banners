@@ -17,35 +17,37 @@
     "lint:css:fix": "pnpm stylelint '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' --fix --allow-empty-input",
     "lint:js": "eslint {javascripts,test} --cache --no-error-on-unmatched-pattern",
     "lint:js:fix": "eslint {javascripts,test} --fix --no-error-on-unmatched-pattern",
-    "lint:hbs": "ember-template-lint 'javascripts/**/*.gjs' --no-error-on-unmatched-pattern",
-    "lint:hbs:fix": "ember-template-lint 'javascripts/**/*.gjs' --fix --no-error-on-unmatched-pattern",
-    "lint:prettier": "pnpm prettier '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' '{javascripts,test}/**/*.{js,gjs}' --check --no-error-on-unmatched-pattern",
-    "lint:prettier:fix": "pnpm prettier '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' '{javascripts,test}/**/*.{js,gjs}' -w --no-error-on-unmatched-pattern",
+    "lint:prettier": "pnpm prettier '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' '{javascripts,test}/**/*.{js,gjs,ts,gts,mts,cts}' --check --no-error-on-unmatched-pattern",
+    "lint:prettier:fix": "pnpm prettier '{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss' '{javascripts,test}/**/*.{js,gjs,ts,gts,mts,cts}' -w --no-error-on-unmatched-pattern",
     "lint:types": "ember-tsc -b",
     "lttf:ignore": "lint-to-the-future ignore"
   },
   "lint-staged": {
-    "{common,stylesheets}/**/*.{css,scss}": "pnpm run lint:css:fix",
-    "javascripts/**/*.*": "pnpm run lint:js:fix",
-    "javascripts/**/*.{gjs,hbs}": "pnpm run lint:hbs:fix",
-    "{common,stylesheets,javascripts}/**/*.{js,gjs,hbs,css,scss}": "pnpm run lint:prettier:fix"
+    "{javascripts,test}/**/*.{js,gjs,ts,gts,mts,cts}": [
+      "pnpm exec eslint --cache --fix --max-warnings=0 --no-error-on-unmatched-pattern",
+      "pnpm exec prettier --write"
+    ],
+    "{javascripts,desktop,mobile,common,scss,stylesheets}/**/*.scss": [
+      "pnpm exec stylelint --fix --allow-empty-input",
+      "pnpm exec prettier --write"
+    ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^20.5.3",
-    "@commitlint/config-conventional": "^20.5.3",
-    "@commitlint/prompt-cli": "^20.5.3",
-    "@discourse/lint-configs": "2.45.0",
-    "@glint/ember-tsc": "1.5.0",
-    "concurrently": "^9.2.1",
-    "discourse": "npm:@discourse/types@2026.3.0-887c5be4",
-    "ember-template-lint": "7.9.3",
-    "eslint": "9.39.2",
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
+    "@commitlint/prompt-cli": "^21.2.0",
+    "@discourse/lint-configs": "3.2.0",
+    "@glint/ember-tsc": "1.8.14",
+    "@types/node": "^26.1.2",
+    "concurrently": "^10.0.4",
+    "discourse": "npm:@discourse/types@2026.8.0-b88e77d4",
+    "eslint": "10.8.0",
     "husky": "9.1.7",
-    "lint-staged": "16.4.0",
-    "lint-to-the-future": "^2.6.4",
-    "lint-to-the-future-eslint": "^3.3.0",
-    "prettier": "3.8.1",
-    "stylelint": "17.4.0"
+    "lint-staged": "17.3.0",
+    "lint-to-the-future": "^3.2.0",
+    "lint-to-the-future-eslint": "^4.0.0",
+    "prettier": "3.9.6",
+    "stylelint": "17.14.1"
   },
   "engines": {
     "node": ">= 22",

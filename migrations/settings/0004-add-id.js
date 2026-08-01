@@ -1,4 +1,8 @@
 export default function migrate(settings) {
+  if (!settings.has("banners")) {
+    return settings;
+  }
+
   const addId = (bannerList) => {
     const prefixMap = {
       "top-notices": "TN",
@@ -10,6 +14,12 @@ export default function migrate(settings) {
 
     return bannerList.map((banner) => {
       const outlet = banner.plugin_outlet;
+      if (!outlet || !(outlet in prefixMap)) {
+        throw new Error(
+          `Migration stopped. Banner has an invalid plugin_outlet: "${outlet}". Expected one of: ${Object.keys(prefixMap).join(", ")}.`
+        );
+      }
+
       const prefix = prefixMap[outlet];
 
       if (!counters[outlet]) {
@@ -26,11 +36,9 @@ export default function migrate(settings) {
     });
   };
 
-  if (settings.has("banners")) {
-    const banners = settings.get("banners");
-    const updatedBanners = addId(banners);
+  const banners = settings.get("banners");
+  const updatedBanners = addId(banners);
 
-    settings.set("banners", updatedBanners);
-  }
+  settings.set("banners", updatedBanners);
   return settings;
 }

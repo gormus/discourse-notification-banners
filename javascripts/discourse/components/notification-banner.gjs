@@ -1,23 +1,39 @@
 import Component from "@glimmer/component";
 import { tracked } from "@glimmer/tracking";
 import { action } from "@ember/object";
-import { htmlSafe } from "@ember/template";
-import CookText from "discourse/components/cook-text";
-import DButton from "discourse/components/d-button";
+import { trustHTML } from "@ember/template";
+import DButton from "discourse/ui-kit/d-button";
+import DCookText from "discourse/ui-kit/d-cook-text";
 
 export default class NotificationBanner extends Component {
   @tracked
-  dismissed = this.args.banner.dismissible
-    ? localStorage.getItem(this.args.banner.id)
-    : false;
+  dismissed =
+    this.args.banner.dismissible && !this.args.inCarousel
+      ? (() => {
+          try {
+            return localStorage.getItem(this.args.banner.id);
+          } catch {
+            // localStorage may be unavailable (e.g., private browsing mode)
+            return null;
+          }
+        })()
+      : false;
+
+  get dismissible() {
+    return this.args.banner.dismissible && !this.args.inCarousel;
+  }
 
   @action
   dismiss() {
-    if (!this.args.banner.dismissible) {
+    if (!this.dismissible) {
       return;
     }
     this.dismissed = true;
-    return localStorage.setItem(this.args.banner.id, true);
+    try {
+      localStorage.setItem(this.args.banner.id, true);
+    } catch {
+      // localStorage may be unavailable; silently fail
+    }
   }
 
   get showBanner() {
@@ -29,10 +45,10 @@ export default class NotificationBanner extends Component {
       <div
         id={{@banner.id}}
         class="notification-banner"
-        style={{htmlSafe @banner.styles}}
+        style={{trustHTML @banner.styles}}
       >
         <div class="notification-banner__wrapper wrap">
-          {{#if @banner.dismissible}}
+          {{#if this.dismissible}}
             <div class="notification-banner__close">
               <DButton
                 @icon="xmark"
@@ -46,7 +62,7 @@ export default class NotificationBanner extends Component {
             {{#if @banner.title}}
               <h2 class="notification-banner__header">{{@banner.title}}</h2>
             {{/if}}
-            <CookText @rawText={{@banner.message}} />
+            <DCookText @rawText={{@banner.message}} />
           </div>
         </div>
       </div>

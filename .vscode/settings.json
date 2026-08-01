@@ -43,6 +43,7 @@
   "stylelint.validate": ["css", "postcss", "scss"],
 
   // disable other stylesheet linters
+  "biome.enabled": false,
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false
